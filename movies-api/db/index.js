@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import path from 'path';
-dotenv.config({ path: path.resolve('../.env') });
+dotenv.config({ path: path.resolve('./.env') });
 console.log("MONGO_DB =", process.env.MONGO_DB);
 
 

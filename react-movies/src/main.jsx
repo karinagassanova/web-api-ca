@@ -20,7 +20,9 @@ import LoginPage from "./pages/loginPage";
 import SignupPage from "./pages/signupPage";
 import ProfilePage from "./pages/profilePage";
 import StartPage from "./pages/startPage";
-
+import AuthContextProvider from "./contexts/authContext"; 
+import ProtectedRoutes
+ from "./protectedRoutes";
 // Configure react-query client with caching and refetching defaults
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -37,14 +39,22 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       {/* BrowserRouter wraps the app for routing */}
       <BrowserRouter>
+      <AuthContextProvider>
         {/* SiteHeader is always visible */}
         <SiteHeader />
         {/* Provide global movie context (favorites, reviews, must watch) */}
         <MoviesContextProvider>
           {/* Define application routes */}
           <Routes>
-            {/* Favorite movies page */}
+            {/* Protected routes */}
+            <Route element={<ProtectedRoutes />}>
+            {/* Profile  page */}
+            <Route path="/profile" element={<ProfilePage />} />
+             {/* Favourite movies page */}
             <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
+             {/* Must Watch movies */}
+            <Route path="/movies/mustwatch" element={<MustWatchMoviesPage />} />
+            </Route>
             {/* Movie review page */}
             <Route path="/reviews/:id" element={<MovieReviewPage />} />
             {/* Movie details page */}
@@ -55,8 +65,6 @@ const App = () => {
             <Route path="/reviews/form" element={<AddMovieReviewPage />} />
             {/* Upcoming movies */}
             <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
-            {/* Must Watch movies */}
-            <Route path="/movies/mustwatch" element={<MustWatchMoviesPage />} />
             {/* Popular movies */}
             <Route path="/movies/popular" element={<PopularMoviesPage />} />
             {/* Top Rated movies */}
@@ -68,11 +76,11 @@ const App = () => {
             {/* Catch-all: redirect to home */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/" element={<StartPage />} />  // First page now
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </MoviesContextProvider>
+        </AuthContextProvider>
       </BrowserRouter>
       {/* Catch-all: redirect to home */}
       <ReactQueryDevtools initialIsOpen={false} />

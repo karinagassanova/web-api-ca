@@ -18,10 +18,10 @@ const errHandler = (err, req, res, next) => {
 const app = express();
 
 const port = process.env.PORT;
-// Enable CORS for all requests
-app.use(cors());
-app.use('/api/movies', moviesRouter); 
-app.use(express.json());
+// Enable CORS for all requests      
+app.use(cors());  
+app.use(express.json());                  
+app.use('/api/movies', moviesRouter);
 app.use('/api/users', usersRouter);
 app.use(errHandler);
 

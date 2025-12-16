@@ -1,15 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "./pages/homePage";
 import MoviePage from "./pages/movieDetailsPage";
 import FavoriteMoviesPage from "./pages/favoriteMoviesPage";
 import MovieReviewPage from "./pages/movieReviewPage";
-import SiteHeader from './components/siteHeader'
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import MoviesContextProvider from "./contexts/moviesContext";
-import AddMovieReviewPage from './pages/addMovieReviewPage'
+import AddMovieReviewPage from './pages/addMovieReviewPage';
 import UpcomingMoviesPage from "./pages/upcomingMoviesPage";
 import MustWatchMoviesPage from "./pages/mustWatchMoviesPage";
 import PopularMoviesPage from "./pages/popularMoviesPage";
@@ -20,10 +16,17 @@ import LoginPage from "./pages/loginPage";
 import SignupPage from "./pages/signupPage";
 import ProfilePage from "./pages/profilePage";
 import StartPage from "./pages/startPage";
-import AuthContextProvider from "./contexts/authContext"; 
-import ProtectedRoutes
- from "./protectedRoutes";
-// Configure react-query client with caching and refetching defaults
+
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import MoviesContextProvider from "./contexts/moviesContext";
+import AuthContextProvider, { AuthContext } from "./contexts/authContext"; 
+import ProtectedRoutes from "./protectedRoutes";
+
+import SiteHeader from "./components/siteHeader/siteHeader.jsx";
+import MovieSiteHeader from "./components/MovieSiteHeader"; // For authenticated users
+
+// Configure React Query client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -34,59 +37,51 @@ const queryClient = new QueryClient({
   },
 });
 
-const App = () => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      {/* BrowserRouter wraps the app for routing */}
-      <BrowserRouter>
+// Conditional header based on authentication
+const AppHeader = () => {
+  const { isAuthenticated } = useContext(AuthContext);
+  return isAuthenticated ? <MovieSiteHeader /> : <SiteHeader />;
+};
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <BrowserRouter>
       <AuthContextProvider>
-        {/* SiteHeader is always visible */}
-        <SiteHeader />
-        {/* Provide global movie context (favorites, reviews, must watch) */}
+        {/* Conditional header */}
+        <AppHeader />
+        {/* Global movies context */}
         <MoviesContextProvider>
-          {/* Define application routes */}
           <Routes>
             {/* Protected routes */}
             <Route element={<ProtectedRoutes />}>
-            {/* Profile  page */}
-            <Route path="/profile" element={<ProfilePage />} />
-             {/* Favourite movies page */}
-            <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
-             {/* Must Watch movies */}
-            <Route path="/movies/mustwatch" element={<MustWatchMoviesPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
+              <Route path="/movies/mustwatch" element={<MustWatchMoviesPage />} />
             </Route>
-            {/* Movie review page */}
+
+            {/* Public / other routes */}
             <Route path="/reviews/:id" element={<MovieReviewPage />} />
-            {/* Movie details page */}
             <Route path="/movies/:id" element={<MoviePage />} />
-            {/* Home / Discover page */}
             <Route path="/home" element={<HomePage />} />
-            {/* Add a new movie review */}
             <Route path="/reviews/form" element={<AddMovieReviewPage />} />
-            {/* Upcoming movies */}
             <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
-            {/* Popular movies */}
             <Route path="/movies/popular" element={<PopularMoviesPage />} />
-            {/* Top Rated movies */}
             <Route path="/movies/top-rated" element={<TopRatedMoviesPage />} />
-            {/* Now Playing movies */}
             <Route path="/movies/now-playing" element={<NowPlayingMoviesPage />} />
-            {/* Actor details page */}
             <Route path="/actors/:actorId" element={<ActorDetailsPage />} />
-            {/* Catch-all: redirect to home */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/" element={<StartPage />} />  // First page now
+            <Route path="/" element={<StartPage />} />
+            {/* Catch-all route */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </MoviesContextProvider>
-        </AuthContextProvider>
-      </BrowserRouter>
-      {/* Catch-all: redirect to home */}
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  );
-};
-// Render the App to the DOM
-const rootElement = createRoot(document.getElementById("root"))
+      </AuthContextProvider>
+    </BrowserRouter>
+    <ReactQueryDevtools initialIsOpen={false} />
+  </QueryClientProvider>
+);
+
+// Render the App
+const rootElement = createRoot(document.getElementById("root"));
 rootElement.render(<App />);

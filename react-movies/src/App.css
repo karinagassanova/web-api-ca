@@ -1,0 +1,87 @@
+/* Reset */
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+/* SiteHeader styling */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; 
+  padding: 9px 22px;
+  background:#032541;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+/* Logo */
+.logo {
+  height: 45px;
+  width: 403px;
+  cursor: pointer;
+  max-width: 45%;
+}
+
+/* Left section of header */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Right section of header */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Welcome text */
+.welcome-text {
+  font-weight: 500;
+  color: white;
+}
+
+/* Buttons/Links in header */
+.header-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  background-color: transparent;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap; 
+}
+
+.header-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Main content below header */
+.main-content {
+  padding-top: 72px; 
+}
+
+/* Responsive tweaks */
+@media screen and (max-width: 600px) {
+  .logo {
+    height: 35px;
+    width: 140px;
+  }
+  .header-btn {
+    padding: 4px 8px;
+    font-size: 0.9rem;
+  }
+}

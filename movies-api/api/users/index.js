@@ -2,6 +2,7 @@ import express from 'express';
 import User from './userModel.js';
 import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 const router = express.Router(); // eslint-disable-line
 
@@ -60,7 +61,26 @@ async function authenticateUser(req, res) {
         return res.status(401).json({ success: false, msg: 'Authentication failed. User not found.' });
     }
 
-    const isMatch = await user.comparePassword(req.body.password);
+    // Check if password is hashed (bcrypt hashes start with $2a$, $2b$, or $2y$)
+    const isHashed = user.password.startsWith('$2a$') || user.password.startsWith('$2b$') || user.password.startsWith('$2y$');
+    
+    let isMatch;
+    if (isHashed) {
+        // Password is hashed, use bcrypt compare
+        isMatch = await user.comparePassword(req.body.password);
+    } else {
+        // Password is plain text (old account), compare directly and then hash it
+        isMatch = user.password === req.body.password;
+        if (isMatch) {
+            // Hash the password and save it
+            const saltRounds = 10;
+            user.password = await bcrypt.hash(req.body.password, saltRounds);
+            await user.save();
+            console.log('Password hashed and updated for user:', req.body.username);
+        }
+    }
+    
+    console.log('Login attempt:', { username: req.body.username, passwordLength: req.body.password?.length, isMatch, isHashed });
     if (isMatch) {
         const token = jwt.sign({ username: user.username }, process.env.SECRET);
         res.status(200).json({ success: true, token: 'BEARER ' + token });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import { useTheme } from "@mui/material/styles";
@@ -16,11 +17,14 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { AuthContext } from "../../contexts/authContext";
 
 // Spacer to push content below the fixed AppBar
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
 const SiteHeader = () => {
+  // Get authentication context
+  const { userName, signout } = useContext(AuthContext);
   // Manage drawer and mobile menu state
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -177,6 +181,17 @@ const SiteHeader = () => {
           )}
           {/* Push favorites icon to far right */}
           <div style={{ flexGrow: 1 }} />
+          {/* Welcome message with username */}
+          <Typography 
+            variant="body1" 
+            sx={{ 
+              color: "white", 
+              mr: 2,
+              display: { xs: 'none', sm: 'block' }
+            }}
+          >
+            Welcome {userName}!
+          </Typography>
           {/* Open favorites/must watch drawer */}
           <IconButton aria-label="open drawer" onClick={toggleDrawer(true)}
             sx={{
@@ -190,6 +205,23 @@ const SiteHeader = () => {
           >
             <FavoriteIcon />
           </IconButton>
+          {/* Sign out button */}
+          <Button
+            color="inherit"
+            onClick={signout}
+            sx={{
+              ml: 2,
+              fontWeight: '400',
+              fontSize: '0.9rem',
+              textTransform: 'none',
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                borderRadius: 1
+              },
+            }}
+          >
+            Sign Out
+          </Button>
         </Toolbar>
         {/* Sliding drawer for favorites & must-watch navigation */}
         <Drawer

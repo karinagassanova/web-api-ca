@@ -21,6 +21,13 @@ const AuthContextProvider = (props) => {
       }
 
       try {
+        // Extract username from JWT token
+        const tokenWithoutBearer = token.replace(/^(BEARER|Bearer)\s+/i, "");
+        const payload = JSON.parse(atob(tokenWithoutBearer.split('.')[1]));
+        if (payload.username) {
+          setUserName(payload.username);
+        }
+        
         // Test token by fetching user movies - if successful, token is valid
         await getUserMovies();
         setIsAuthenticated(true);
@@ -29,6 +36,7 @@ const AuthContextProvider = (props) => {
         localStorage.removeItem("token");
         setAuthToken(null);
         setIsAuthenticated(false);
+        setUserName("");
       }
     };
 

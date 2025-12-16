@@ -1,70 +1,98 @@
-import React, { useState } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { getUserMovies, addFavorite, removeFavorite, addMustWatch, removeMustWatch } from "../api/userMovies-api";
+import { AuthContext } from "./authContext";
 
-// Create context for global movie-related state
-export const MoviesContext = React.createContext(null);
+export const MoviesContext = createContext(null);
 
-const MoviesContextProvider = (props) => {
-  // State for favorite movies (array of movie IDs)
-  const [favorites, setFavorites] = useState([])
-  // State for user reviews (object: { movieId: review })
-  const [myReviews, setMyReviews] = useState({})
-  // State for "Must Watch" movies (array of movie IDs)
+const MoviesContextProvider = ({ children }) => {
+  const [favorites, setFavorites] = useState([]);
   const [mustWatch, setMustWatch] = useState([]);
+  const [myReviews, setMyReviews] = useState({});
+  // Get authentication status from AuthContext
+  const { isAuthenticated } = useContext(AuthContext);
 
-  // Add a movie to the Must Watch list if not already included
-  const addToMustWatch = (movie) => {
-    if (!mustWatch.includes(movie.id)) {
-      const newMustWatch = [...mustWatch, movie.id];
-      setMustWatch(newMustWatch);
-      console.log("Must Watch list:", newMustWatch); // confirm
+  useEffect(() => {
+    const fetchMovies = async () => {
+      // Clear favorites when user logs out
+      if (!isAuthenticated) {
+        setFavorites([]);
+        setMustWatch([]);
+        setMyReviews({});
+        return;
+      }
+
+      try {
+        const data = await getUserMovies();
+        setFavorites(data.favorites || []);
+        setMustWatch(data.mustWatch || []);
+      } catch (err) {
+        console.error("Failed to fetch user movies:", err);
+        if (!localStorage.getItem("token")) {
+          setFavorites([]);
+          setMustWatch([]);
+        }
+      }
+    };
+    fetchMovies();
+  // Refetch favorites when authentication status changes (login/logout)
+  }, [isAuthenticated]);
+
+  const addToFavorites = async (movie) => {
+    try {
+      const updated = await addFavorite(movie.id);
+      setFavorites(updated);
+    } catch (err) {
+      console.error("Failed to add favorite:", err);
+      alert(`Failed to add favorite: ${err.message}`);
     }
   };
 
-  // Add a movie to the Favorites list if not already included
-  const addToFavorites = (movie) => {
-    let newFavorites = [];
-    if (!favorites.includes(movie.id)) {
-      newFavorites = [...favorites, movie.id];
+  const removeFromFavorites = async (movie) => {
+    try {
+      const updated = await removeFavorite(movie.id);
+      setFavorites(updated);
+    } catch (err) {
+      console.error("Failed to remove favorite:", err);
+      alert("Failed to remove favorite. Please try again.");
     }
-    else {
-      newFavorites = [...favorites];
-    }
-    setFavorites(newFavorites)
   };
 
-  // Add or update a review for a movie
+  const addToMustWatch = async (movie) => {
+    try {
+      const updated = await addMustWatch(movie.id);
+      setMustWatch(updated);
+    } catch (err) {
+      console.error("Failed to add to must watch:", err);
+      alert("Failed to add to must watch. Please try again.");
+    }
+  };
+
+  const removeFromMustWatch = async (movie) => {
+    try {
+      const updated = await removeMustWatch(movie.id);
+      setMustWatch(updated);
+    } catch (err) {
+      console.error("Failed to remove from must watch:", err);
+      alert("Failed to remove from must watch. Please try again.");
+    }
+  };
+
   const addReview = (movie, review) => {
-    setMyReviews({ ...myReviews, [movie.id]: review })
-  };
-  console.log(myReviews);
-
-
-  // Remove a movie from the Favorites list
-  const removeFromFavorites = (movie) => {
-    setFavorites(favorites.filter(
-      (mId) => mId !== movie.id
-    ))
+    setMyReviews({ ...myReviews, [movie.id]: review });
   };
 
-  // Remove a movie from the Must Watch list
-  const removeFromMustWatch = (movie) => {
-    setMustWatch(mustWatch.filter((mId) => mId !== movie.id));
-  };
-
-  // Provide context values and functions to children components
   return (
-    <MoviesContext.Provider
-      value={{
-        favorites,
-        addToFavorites,
-        removeFromFavorites,
-        addReview,
-        mustWatch,
-        addToMustWatch,
-        removeFromMustWatch,
-      }}
-    >
-      {props.children}
+    <MoviesContext.Provider value={{
+      favorites,
+      mustWatch,
+      myReviews,
+      addToFavorites,
+      removeFromFavorites,
+      addToMustWatch,
+      removeFromMustWatch,
+      addReview
+    }}>
+      {children}
     </MoviesContext.Provider>
   );
 };

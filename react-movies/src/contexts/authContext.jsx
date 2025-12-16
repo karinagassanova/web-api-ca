@@ -1,5 +1,6 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import { login, signup } from "../api/tmdb-api";
+import { getUserMovies } from "../api/userMovies-api";
 
 
 export const AuthContext = createContext(null); //eslint-disable-line
@@ -9,6 +10,30 @@ const AuthContextProvider = (props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authToken, setAuthToken] = useState(existingToken); //eslint-disable-line
   const [userName, setUserName] = useState("");
+
+  // Validate token on page load to check if user is actually authenticated
+  useEffect(() => {
+    const validateToken = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setIsAuthenticated(false);
+        return;
+      }
+
+      try {
+        // Test token by fetching user movies - if successful, token is valid
+        await getUserMovies();
+        setIsAuthenticated(true);
+      } catch {
+        // Token is invalid or expired - clear it and set user as not authenticated
+        localStorage.removeItem("token");
+        setAuthToken(null);
+        setIsAuthenticated(false);
+      }
+    };
+
+    validateToken();
+  }, []);
 
   //Function to put JWT token in local storage.
   const setToken = (data) => {
@@ -31,7 +56,10 @@ const AuthContextProvider = (props) => {
   };
 
   const signout = () => {
-    setTimeout(() => setIsAuthenticated(false), 100);
+    localStorage.removeItem("token");
+    setAuthToken(null);
+    setIsAuthenticated(false);
+    setUserName("");
   }
 
   return (

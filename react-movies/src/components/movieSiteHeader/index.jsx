@@ -24,7 +24,7 @@ const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
 const SiteHeader = () => {
   // Get authentication context
-  const { userName, signout } = useContext(AuthContext);
+  const { isAuthenticated, userName, signout } = useContext(AuthContext);
   // Manage drawer and mobile menu state
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -181,47 +181,86 @@ const SiteHeader = () => {
           )}
           {/* Push favorites icon to far right */}
           <div style={{ flexGrow: 1 }} />
-          {/* Welcome message with username */}
-          <Typography 
-            variant="body1" 
-            sx={{ 
-              color: "white", 
-              mr: 2,
-              display: { xs: 'none', sm: 'block' }
-            }}
-          >
-            Welcome {userName}!
-          </Typography>
-          {/* Open favorites/must watch drawer */}
-          <IconButton aria-label="open drawer" onClick={toggleDrawer(true)}
-            sx={{
-              color: "white",
-              ml: 2,
-              "&:hover": {
-                backgroundColor: "#032541",
-                color: "#00bfff",
-              },
-            }}
-          >
-            <FavoriteIcon />
-          </IconButton>
-          {/* Sign out button */}
-          <Button
-            color="inherit"
-            onClick={signout}
-            sx={{
-              ml: 2,
-              fontWeight: '400',
-              fontSize: '0.9rem',
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: 'rgba(255,255,255,0.2)',
-                borderRadius: 1
-              },
-            }}
-          >
-            Sign Out
-          </Button>
+          {/* Logged-in user */}
+{isAuthenticated && (
+  <>
+    <Typography 
+      variant="body1" 
+      sx={{ 
+        color: "white", 
+        mr: 2,
+        display: { xs: 'none', sm: 'block' }
+      }}
+    >
+      Welcome {userName}!
+    </Typography>
+    <IconButton aria-label="open drawer" onClick={toggleDrawer(true)}
+      sx={{
+        color: "white",
+        ml: 2,
+        "&:hover": {
+          backgroundColor: "#032541",
+          color: "#00bfff",
+        },
+      }}
+    >
+      <FavoriteIcon />
+    </IconButton>
+    <Button
+      color="inherit"
+      onClick={signout}
+      sx={{
+        ml: 2,
+        fontWeight: '400',
+        fontSize: '0.9rem',
+        textTransform: 'none',
+        '&:hover': {
+          backgroundColor: 'rgba(255,255,255,0.2)',
+          borderRadius: 1
+        },
+      }}
+    >
+      Sign Out
+    </Button>
+  </>
+)}
+{/* Logged-out user */}
+{!isAuthenticated && (
+  <>
+    <Button
+      color="inherit"
+      onClick={() => navigate("/login")}
+      sx={{
+        ml: 2,
+        fontWeight: '400',
+        fontSize: '0.9rem',
+        textTransform: 'none',
+        '&:hover': {
+          backgroundColor: 'rgba(255,255,255,0.2)',
+          borderRadius: 1
+        }
+      }}
+    >
+      Login
+    </Button>
+    <Button
+      color="inherit"
+      onClick={() => navigate("/signup")}
+      sx={{
+        ml: 1,
+        fontWeight: '400',
+        fontSize: '0.9rem',
+        textTransform: 'none',
+        '&:hover': {
+          backgroundColor: 'rgba(255,255,255,0.2)',
+          borderRadius: 1
+        }
+      }}
+    >
+      Signup
+    </Button>
+  </>
+)}
         </Toolbar>
         {/* Sliding drawer for favorites & must-watch navigation */}
         <Drawer

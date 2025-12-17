@@ -13,8 +13,10 @@ const StartPage = () => {
         </p>
       ) : (
         <p>
-          <Link to="/login">Login</Link> or <Link to="/signup">Signup</Link> to start exploring movies!
-        </p>
+        Browse <Link to="/home">Movies</Link>, or{" "}
+        <Link to="/login">Login</Link> / <Link to="/signup">Signup</Link>
+      </p>
+      
       )}
     </div>
   );

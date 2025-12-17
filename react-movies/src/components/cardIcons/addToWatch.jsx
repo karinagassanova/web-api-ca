@@ -4,17 +4,28 @@ import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { MoviesContext } from "../../contexts/moviesContext";
 import Typography from "@mui/material/Typography";
 import Popover from "@mui/material/Popover";
+import { AuthContext } from "../../contexts/authContext";
+import { useNavigate } from "react-router-dom";
 
 const AddToWatchIcon = ({ movie }) => {
-   // Access the function from context that adds a movie to the "Must Watch" list
   const { addToMustWatch } = useContext(MoviesContext);
+  const { isAuthenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
+  
   // State to manage which element triggers the popover
   const [anchorEl, setAnchorEl] = useState(null);
    // When user clicks button, add movie and show popover
-  const handleClick = (event) => {
+   const handleClick = (event) => {
+    if (!isAuthenticated) {
+      alert("Please log in to add movies to your Must Watch list");
+      navigate("/login");
+      return;
+    }
+  
     addToMustWatch(movie);
     setAnchorEl(event.currentTarget);
   };
+  
 
    // Close popover by clearing anchor
   const handleClose = () => {

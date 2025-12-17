@@ -38,10 +38,8 @@ const queryClient = new QueryClient({
 });
 
 // Conditional header based on authentication
-const AppHeader = () => {
-  const { isAuthenticated } = useContext(AuthContext);
-  return isAuthenticated ? <MovieSiteHeader /> : <SiteHeader />;
-};
+const AppHeader = () => <MovieSiteHeader />;
+
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

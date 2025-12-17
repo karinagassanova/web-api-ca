@@ -14,7 +14,6 @@ export const getMovies = () => {
   });
 };
 
-  
 export const getMovie = (args) => {
   console.log(args)
   const [, idPart] = args.queryKey;
@@ -174,7 +173,7 @@ export const getMovieCredits = async (movieId) => {
 // 
 export const getActorDetails = async (actorId) => {
   const response = await fetch(
-    `https://api.themoviedb.org/3/person/${actorId}?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US`
+     `http://localhost:8080/api/actors/${actorId}`
   );
   if (!response.ok) {
     throw new Error("Failed to fetch actor details");
@@ -184,7 +183,7 @@ export const getActorDetails = async (actorId) => {
 
 export const getActorMovies = async (actorId) => {
   const response = await fetch(
-    `https://api.themoviedb.org/3/person/${actorId}/movie_credits?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US`
+   `http://localhost:8080/api/actors/${actorId}/movies`
   );
   if (!response.ok) {
     throw new Error("Failed to fetch actor movies");

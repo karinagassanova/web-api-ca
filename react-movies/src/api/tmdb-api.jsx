@@ -20,7 +20,7 @@ export const getMovie = (args) => {
   const [, idPart] = args.queryKey;
   const { id } = idPart;
   return fetch(
-    `https://api.themoviedb.org/3/movie/${id}?api_key=${import.meta.env.VITE_TMDB_KEY}`
+    `http://localhost:8080/api/movies/${id}`
   ).then((response) => {
     if (!response.ok) {
       return response.json().then((error) => {
@@ -31,7 +31,7 @@ export const getMovie = (args) => {
   })
   .catch((error) => {
     throw error
- });
+  });
 };
 
   
@@ -93,10 +93,11 @@ export const getMovie = (args) => {
 
   export const getUpcomingMovies = async (page = 1) => {
     const response = await fetch(
-      `https://api.themoviedb.org/3/movie/upcoming?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&page=${page}`
+      `http://localhost:8080/api/movies/upcoming?page=${page}`
     );
     if (!response.ok) {
-      throw new Error(response.statusText);
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.status_message || error.msg || response.statusText || "Failed to fetch upcoming movies");
     }
     return await response.json();
   };

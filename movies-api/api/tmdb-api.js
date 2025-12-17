@@ -51,3 +51,42 @@ export const getGenres = async () => {
   
     return await response.json();
   };
+
+  // Get movie images
+export const getMovieImages = async (id) => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/${id}/images?api_key=${process.env.TMDB_KEY}`
+    );
+  
+    if (!response.ok) {
+      throw new Error((await response.json()).status_message || 'Failed to fetch movie images');
+    }
+  
+    return await response.json();
+  };
+  
+  // Get movie reviews
+  export const getMovieReviews = async (id) => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${process.env.TMDB_KEY}`
+    );
+  
+    if (!response.ok) {
+      throw new Error((await response.json()).status_message || 'Failed to fetch movie reviews');
+    }
+  
+    return await response.json();
+  };
+  
+  // Get movie credits (cast & crew)
+  export const getMovieCredits = async (id) => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.TMDB_KEY}`
+    );
+  
+    if (!response.ok) {
+      throw new Error((await response.json()).status_message || 'Failed to fetch movie credits');
+    }
+  
+    return await response.json();
+  };

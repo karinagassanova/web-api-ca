@@ -113,7 +113,7 @@ export const getMovieReviews = ({ queryKey }) => {
   // https://developer.themoviedb.org/reference/movie-popular-list
   export const getPopularMovies = async (page = 1) => {
     const response = await fetch(
-      `https://api.themoviedb.org/3/movie/popular?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&page=${page}`
+      `http://localhost:8080/api/movies/popular?page=${page}`
     );
     if (!response.ok) {
       const error = await response.json();
@@ -125,7 +125,7 @@ export const getMovieReviews = ({ queryKey }) => {
   // https://developer.themoviedb.org/reference/movie-top-rated-list
   export const getTopRatedMovies = async (page = 1) => {
     const response = await fetch(
-      `https://api.themoviedb.org/3/movie/top_rated?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&page=${page}`
+      `http://localhost:8080/api/movies/top-rated?page=${page}`
     );
     if (!response.ok) {
       const error = await response.json();
@@ -137,7 +137,7 @@ export const getMovieReviews = ({ queryKey }) => {
   // https://developer.themoviedb.org/reference/movie-now-playing-list
   export const getNowPlayingMovies = async (page = 1) => {
     const response = await fetch(
-      `https://api.themoviedb.org/3/movie/now_playing?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&page=${page}`
+      `http://localhost:8080/api/movies/now-playing?page=${page}`
     );
     if (!response.ok) {
       const error = await response.json();
@@ -149,15 +149,15 @@ export const getMovieReviews = ({ queryKey }) => {
   
   // https://developer.themoviedb.org/reference/movie-recommendations
   export const getMovieRecommendations = async (movieId) => {
-   const response = await fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&page=1`
-  );
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.status_message || "Failed to fetch movie recommendations");
-  }
-  return await response.json();
-};
+    const response = await fetch(
+      `http://localhost:8080/api/movies/${movieId}/recommendations`
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.status_message || "Failed to fetch movie recommendations");
+    }
+    return await response.json();
+  };
 
 // https://developer.themoviedb.org/reference/movie-credits
 export const getMovieCredits = async (movieId) => {

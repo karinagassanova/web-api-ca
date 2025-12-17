@@ -90,3 +90,55 @@ export const getMovieImages = async (id) => {
   
     return await response.json();
   };
+
+  // Get popular movies
+export const getPopularMovies = async (page = 1) => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_KEY}&language=en-US&page=${page}`
+    );
+  
+    if (!response.ok) {
+      throw new Error((await response.json()).status_message || 'Failed to fetch popular movies');
+    }
+  
+    return await response.json();
+  };
+  
+  // Get top rated movies
+  export const getTopRatedMovies = async (page = 1) => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.TMDB_KEY}&language=en-US&page=${page}`
+    );
+  
+    if (!response.ok) {
+      throw new Error((await response.json()).status_message || 'Failed to fetch top rated movies');
+    }
+  
+    return await response.json();
+  };
+  
+  // Get now playing movies
+  export const getNowPlayingMovies = async (page = 1) => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.TMDB_KEY}&language=en-US&page=${page}`
+    );
+  
+    if (!response.ok) {
+      throw new Error((await response.json()).status_message || 'Failed to fetch now playing movies');
+    }
+  
+    return await response.json();
+  };
+  
+  // Get movie recommendations
+  export const getMovieRecommendations = async (movieId) => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${process.env.TMDB_KEY}&language=en-US&page=1`
+    );
+  
+    if (!response.ok) {
+      throw new Error((await response.json()).status_message || 'Failed to fetch movie recommendations');
+    }
+  
+    return await response.json();
+  };

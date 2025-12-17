@@ -25,3 +25,29 @@ export const getUpcomingMovies = async (page = 1) => {
 
   return await response.json();
 };
+
+// Get single movie details
+export const getMovie = async (id) => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_KEY}&language=en-US`
+    );
+  
+    if (!response.ok) {
+      throw new Error((await response.json()).status_message || 'Failed to fetch movie details');
+    }
+  
+    return await response.json();
+  };
+
+  // Get movie genres
+export const getGenres = async () => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.TMDB_KEY}&language=en-US`
+    );
+  
+    if (!response.ok) {
+      throw new Error((await response.json()).status_message || 'Failed to fetch genres');
+    }
+  
+    return await response.json();
+  };

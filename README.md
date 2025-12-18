@@ -58,6 +58,31 @@ Key points:
 
 ---
 
-## Project Structure
+## Key Implementations
 
-### Frontend (`react-movies`)
+### Movies & Actors
+- Frontend pages fetch movie and actor data **via the Movies API** instead of directly calling TMDB.  
+- Actor endpoints provide **detailed actor info and associated movies**.  
+- API helpers abstract all network requests for cleaner frontend code.
+
+### User-Specific Content
+- Users can **add/remove movies** from favorites and must-watch lists.  
+- AuthContext and MoviesContext are integrated to **refresh user-specific data** on login/logout.  
+- JWT validation ensures secure access and clears user data on logout.  
+- Protected routes restrict access to authenticated-only pages while keeping public pages accessible.
+
+### Reviews
+- Users can **create, read, update, and delete reviews**.  
+- Reviews are stored in MongoDB and are **user-specific**.  
+- Frontend components handle review creation (`reviewForm`) and display (`movieReviews`).  
+- Users can view all their reviews on the **“My Reviews”** page.
+
+---
+
+## Technologies Used
+- **Frontend**: React, React Router, Material UI, Context API  
+- **Backend**: Node.js, Express.js, MongoDB (Mongoose)  
+- **Authentication**: JWT, bcrypt for password hashing  
+- **APIs**: Movies API (proxy to TMDB), Users API, Reviews API  
+
+---

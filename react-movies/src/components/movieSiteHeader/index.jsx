@@ -15,10 +15,7 @@ import tmdbLogo from '../../images/tmdb.png';
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-<<<<<<< HEAD
-=======
 import ListItemButton from "@mui/material/ListItemButton";
->>>>>>> 114069a (Add user-specific content API for reviews, favourites, watchlist, and viewing history)
 import ListItemText from "@mui/material/ListItemText";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { AuthContext } from "../../contexts/authContext";
@@ -52,7 +49,6 @@ const SiteHeader = () => {
   // Drawer links for quick access to lists
   const drawerList = (
     <List sx={{ width: 250 }}>
-<<<<<<< HEAD
       <ListItem
         button
         onClick={() => { navigate("/movies/favorites"); setDrawerOpen(false); }}
@@ -65,34 +61,6 @@ const SiteHeader = () => {
         }}
       >
         <ListItemText primary="Favorites" />
-      </ListItem>
-
-      <ListItem
-        button
-        onClick={() => { navigate("/movies/mustwatch"); setDrawerOpen(false); }}
-        sx={{
-          "&:hover": {
-            backgroundColor: "#032541",
-            color: "#00bfff",
-            cursor: "pointer",
-          },
-        }}
-      >
-        <ListItemText primary="Must Watch" />
-=======
-      <ListItem disablePadding>
-        <ListItemButton
-          onClick={() => { navigate("/movies/favorites"); setDrawerOpen(false); }}
-          sx={{
-            "&:hover": {
-              backgroundColor: "#032541",
-              color: "#00bfff",
-              cursor: "pointer",
-            },
-          }}
-        >
-          <ListItemText primary="Favorites" />
-        </ListItemButton>
       </ListItem>
 
       <ListItem disablePadding>
@@ -123,7 +91,6 @@ const SiteHeader = () => {
         >
           <ListItemText primary="My Reviews" />
         </ListItemButton>
->>>>>>> 114069a (Add user-specific content API for reviews, favourites, watchlist, and viewing history)
       </ListItem>
     </List>
   );

@@ -15,6 +15,7 @@ import ActorDetailsPage from "./pages/actorDetailsPage";
 import LoginPage from "./pages/loginPage";
 import SignupPage from "./pages/signupPage";
 import ProfilePage from "./pages/profilePage";
+import MyReviewsPage from "./pages/myReviewsPage";
 import StartPage from "./pages/startPage";
 
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
@@ -55,6 +56,7 @@ const App = () => (
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/movies/favorites" element={<FavoriteMoviesPage />} />
               <Route path="/movies/mustwatch" element={<MustWatchMoviesPage />} />
+              <Route path="/my-reviews" element={<MyReviewsPage />} />
             </Route>
 
             {/* Public / other routes */}

@@ -9,12 +9,6 @@ import { MoviesContext } from "../../contexts/moviesContext";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router";
-
-const handleSnackClose = (event) => {
-  setOpen(false);
-  navigate("/movies/favorites");
-};
-
 const ratings = [
   {
     value: 5,
@@ -98,6 +92,11 @@ const ReviewForm = ({ movie }) => {
     setOpen(true); // NEW
   };
 
+  const handleSnackClose = () => {
+    setOpen(false);
+    navigate(`/movies/${movie.id}`);
+  };
+
 
   return (
     <Box component="div" sx={styles.root}>
@@ -108,6 +107,7 @@ const ReviewForm = ({ movie }) => {
         sx={styles.snack}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={open}
+        autoHideDuration={4000}
         onClose={handleSnackClose}
       >
         <MuiAlert

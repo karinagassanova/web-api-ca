@@ -4,6 +4,7 @@ import moviesRouter from './api/movies/index.js';
 import usersRouter from './api/users/index.js';
 import userMoviesRouter from './routes/userMovies.js';
 import actorsRouter from './api/actors/index.js'; 
+import reviewsRouter from './api/reviews/index.js';
 
 // other imports
 import cors from 'cors';
@@ -34,6 +35,7 @@ app.use('/api/movies', moviesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/usermovies', userMoviesRouter);
 app.use('/api/actors', actorsRouter);
+app.use('/api/reviews', reviewsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ msg: `Route not found: ${req.method} ${req.path}` });
@@ -44,3 +46,4 @@ app.use(errHandler);
 app.listen(port, () => {
   console.info(`Server running at ${port}`);
 });
+

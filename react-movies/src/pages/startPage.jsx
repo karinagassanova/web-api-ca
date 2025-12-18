@@ -1,24 +1,55 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from '../contexts/authContext';
+import { Container, Paper, Typography, Button, Stack,} from "@mui/material";
+import MovieIcon from '@mui/icons-material/Movie';
 
 const StartPage = () => {
   const { isAuthenticated, userName } = useContext(AuthContext);
 
   return (
-    <div>
+<Container maxWidth="sm" sx={{ mt: 10 }}>
+  <Paper elevation={4} sx={{ p: 4, textAlign: "center" }}>
       {isAuthenticated ? (
-        <p>
-          Welcome {userName}! View your <Link to="/home">Movies</Link> or your <Link to="/profile">Profile</Link>.
-        </p>
+       <Typography variant="h6" sx={{ mb: 3 }}>
+  Welcome back, <strong>{userName}</strong>!
+</Typography>
       ) : (
-        <p>
-        Browse <Link to="/home">Movies</Link>, or{" "}
-        <Link to="/login">Login</Link> / <Link to="/signup">Signup</Link>
-      </p>
-      
+        <>
+        <Typography variant="body1" sx={{ mb: 3 }}>
+  Browse movies or sign in to personalize your experience.
+</Typography>
+      <Stack direction="row" spacing={2} justifyContent="center">
+ <Button
+  variant="contained"
+  component={RouterLink}
+  to="/home"
+  startIcon={<MovieIcon />}
+>
+  Movies
+</Button>
+
+<Button
+  variant="outlined"
+  component={RouterLink}
+  to="/login"
+>
+  Login
+</Button>
+
+<Button
+  variant="text"
+  component={RouterLink}
+  to="/signup"
+>
+  Signup
+</Button>
+
+</Stack>
+</>
       )}
-    </div>
+ </Paper>
+</Container>
   );
 };
 

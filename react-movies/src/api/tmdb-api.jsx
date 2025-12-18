@@ -100,7 +100,7 @@ export const getMovieReviews = ({ queryKey }) => {
   // https://developer.themoviedb.org/reference/configuration-languages
   export const getLanguages = async () => {
     const response = await fetch(
-      `https://api.themoviedb.org/3/configuration/languages?api_key=${import.meta.env.VITE_TMDB_KEY}`
+       `http://localhost:8080/api/movies/languages`
     );
     if (!response.ok) {
       const error = await response.json();

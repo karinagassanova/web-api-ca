@@ -168,3 +168,16 @@ export const getActorDetails = async (actorId) => {
   
     return await response.json();
   };
+
+  // Get available languages
+export const getLanguages = async () => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/configuration/languages?api_key=${process.env.TMDB_KEY}`
+    );
+  
+    if (!response.ok) {
+      throw new Error((await response.json()).status_message || 'Failed to fetch languages');
+    }
+  
+    return await response.json();
+  };
